@@ -1,6 +1,9 @@
 package uvg.edu.gt;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,14 +12,12 @@ import java.util.stream.Collectors;
 public class MapManager {
 
     private Map<String, String> cardMap; // Almacena la relación entre la carta y su tipo
-    private MapFactory mapFactory; // Factory para crear la instancia de Map deseada
+    private Map<String, Integer> cardCollection = new HashMap<>(); // Colección del usuario
 
-    public MapManager(String mapType) {
-        // Selecciona el tipo de Map basado en el input del usuario
-        this.mapFactory = MapFactorySelector.getFactory(mapType);
-        this.cardMap = mapFactory.createMap();
+    public MapManager(Map<String, String> map) {
+        this.cardMap = map;
     }
-
+      
     public void loadCardsFromFile(String filePath) {
         // Carga las cartas desde un archivo
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -54,6 +55,42 @@ public class MapManager {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.joining(", "));
         System.out.println("Cartas de tipo " + type + ": " + cards);
+    }
+
+    public void addCardToCollection(String cardName) {
+        if (cardMap.containsKey(cardName)) {
+            int currentCount = cardCollection.getOrDefault(cardName, 0);
+            cardCollection.put(cardName, currentCount + 1);
+        } else {
+            System.out.println("La carta no se encuentra entre las cartas disponibles.");
+        }
+    }
+
+    // Mostrar el nombre, tipo y cantidad de cada carta en la colección del usuario
+    public void showCollection() {
+        cardCollection.forEach((cardName, count) -> {
+            String type = cardMap.get(cardName);
+            System.out.println(cardName + " - " + type + " - " + count);
+        });
+    }
+
+    // Mostrar el nombre, tipo y cantidad de cada carta en la colección del usuario, ordenadas por tipo
+    public void showCollectionSortedByType() {
+        cardCollection.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByKey())
+                .forEach(entry -> {
+                    String cardName = entry.getKey();
+                    String type = cardMap.get(cardName);
+                    Integer count = entry.getValue();
+                    System.out.println(cardName + " - " + type + " - " + count);
+                });
+    }
+
+    public void showAllCardsSortedByType() {
+        cardMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .forEach(entry ->
+                        System.out.println(entry.getKey() + ": " + entry.getValue()));
     }
 }
 

@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class MainClass {
     public static void main(String[] args) {
+        System.out.println("Directorio de trabajo actual: " + System.getProperty("user.dir"));
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             System.out.println("Seleccione el tipo de MAP que desea utilizar:");
             System.out.println("1) HashMap");
@@ -16,25 +17,25 @@ public class MainClass {
             System.out.print("Ingrese su elección: ");
             String eleccion = reader.readLine();
 
-            MapFactory factory = null;
+            Map<String, String> map;
             switch (eleccion) {
                 case "1":
-                    factory = new HashMapFactory();
+                    map = new HashMapFactory().createMap();
                     break;
                 case "2":
-                    factory = new TreeMapFactory();
+                    map = new TreeMapFactory().createMap();
                     break;
                 case "3":
-                    factory = new LinkedHashMapFactory();
+                    map = new LinkedHashMapFactory().createMap();
                     break;
                 default:
                     System.out.println("Elección no válida. Usando HashMap por defecto.");
-                    factory = new HashMapFactory();
+                    map = new HashMapFactory().createMap();
                     break;
             }
 
-            MapManager mapManager = new MapManager(factory.createMap());
-            String archivoCartas = "cartas.txt"; // Asume la existencia de este archivo
+            MapManager mapManager = new MapManager(map);
+            String archivoCartas = "cards_desc.txt"; // Asume la existencia de este archivo
             long inicioCarga = System.nanoTime();
             mapManager.loadCardsFromFile(archivoCartas);
             long finCarga = System.nanoTime();
@@ -53,8 +54,10 @@ public class MainClass {
                 System.out.println("7) Salir");
                 System.out.print("Ingrese el número de la operación que desea realizar: ");
                 String operacion = reader.readLine();
+                
 
-                long inicioOperacion, finOperacion;
+                long inicioOperacion = 0;
+                long finOperacion = 0;
 
                 switch (operacion) {
                     case "1":
