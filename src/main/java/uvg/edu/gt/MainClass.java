@@ -40,6 +40,9 @@ public class MainClass {
             mapManager.loadCardsFromFile(archivoCartas);
             long finCarga = System.nanoTime();
 
+             // Aquí verificas si las cartas se han cargado correctamente imprimiendo el tamaño del mapa
+            System.out.println("Cartas cargadas: " + mapManager.cardMap.size());
+
             System.out.println("Tiempo total de carga de cartas: " + (finCarga - inicioCarga) + " nanosegundos.");
 
             boolean continuar = true;

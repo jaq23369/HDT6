@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class MapManager {
 
-    private Map<String, String> cardMap; // Almacena la relación entre la carta y su tipo
+    protected Map<String, String> cardMap; // Almacena la relación entre la carta y su tipo
     private Map<String, Integer> cardCollection = new HashMap<>(); // Colección del usuario
 
     public MapManager(Map<String, String> map) {
@@ -23,15 +23,19 @@ public class MapManager {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(";");
+                String[] parts = line.split("\\|"); // Cambiado a usar "|" como delimitador
                 if (parts.length == 2) {
                     cardMap.put(parts[0].trim(), parts[1].trim());
+                } else {
+                    // Puedes manejar el error o imprimir para depuración aquí
+                    System.out.println("Línea con formato inesperado: " + line);
                 }
             }
         } catch (IOException e) {
             System.err.println("Error al leer el archivo: " + e.getMessage());
         }
     }
+    
 
     public void addCard(String cardName, String cardType) {
         // Añade una nueva carta al mapa
@@ -66,13 +70,17 @@ public class MapManager {
         }
     }
 
-    // Mostrar el nombre, tipo y cantidad de cada carta en la colección del usuario
-    public void showCollection() {
-        cardCollection.forEach((cardName, count) -> {
-            String type = cardMap.get(cardName);
-            System.out.println(cardName + " - " + type + " - " + count);
-        });
+    // Método dentro de MapManager
+public void showCollection() {
+    if (cardMap.isEmpty()) {
+        System.out.println("No hay cartas para mostrar.");
+        return;
     }
+    for (Map.Entry<String, String> entry : cardMap.entrySet()) {
+        System.out.println("Carta: " + entry.getKey() + " - Tipo: " + entry.getValue());
+    }
+}
+
 
     // Mostrar el nombre, tipo y cantidad de cada carta en la colección del usuario, ordenadas por tipo
     public void showCollectionSortedByType() {
@@ -87,10 +95,16 @@ public class MapManager {
     }
 
     public void showAllCardsSortedByType() {
+        if (cardMap.isEmpty()) {
+            System.out.println("No hay cartas para mostrar.");
+            return;
+        }
+        
         cardMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
-                .forEach(entry ->
-                        System.out.println(entry.getKey() + ": " + entry.getValue()));
+               .sorted(Map.Entry.comparingByValue())
+               .forEach(entry -> {
+                   System.out.println(entry.getKey() + ": " + entry.getValue());
+               });
     }
 }
 
