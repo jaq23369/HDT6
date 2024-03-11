@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.Map;
 
+/*
+ * Clase principal que maneja la interacción con el usuario y utiliza las clases y métodos definidos anteriormente.
+ */
 public class MainClass {
     public static void main(String[] args) {
         System.out.println("Directorio de trabajo actual: " + System.getProperty("user.dir"));
@@ -40,7 +43,7 @@ public class MainClass {
             mapManager.loadCardsFromFile(archivoCartas);
             long finCarga = System.nanoTime();
 
-             // Aquí verificas si las cartas se han cargado correctamente imprimiendo el tamaño del mapa
+            // Aquí verificas si las cartas se han cargado correctamente imprimiendo el tamaño del mapa
             System.out.println("Cartas cargadas: " + mapManager.cardMap.size());
 
             System.out.println("Tiempo total de carga de cartas: " + (finCarga - inicioCarga) + " nanosegundos.");
@@ -57,7 +60,6 @@ public class MainClass {
                 System.out.println("7) Salir");
                 System.out.print("Ingrese el número de la operación que desea realizar: ");
                 String operacion = reader.readLine();
-                
 
                 long inicioOperacion = 0;
                 long finOperacion = 0;
