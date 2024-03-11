@@ -35,7 +35,7 @@ public class MainClass {
             }
 
             MapManager mapManager = new MapManager(map);
-            String archivoCartas = "cards_desc.txt"; // Asume la existencia de este archivo
+            String archivoCartas = "src\\main\\java\\uvg\\edu\\gt\\cards_desc.txt"; // Asume la existencia de este archivo
             long inicioCarga = System.nanoTime();
             mapManager.loadCardsFromFile(archivoCartas);
             long finCarga = System.nanoTime();
